@@ -19,10 +19,11 @@
             }
 
             #pointer {
-                position: absolute;
+                position: fixed;
                 z-index: 1;
                 left: 100px;
                 top: 20px;
+                border: 1px solid black;
             }
             .hidden { display: none;}
 
@@ -33,13 +34,14 @@
       <figure class="map">
       <img id="map-image" src="sheridan-map.jpg" alt="Map of Sheridan Campus">
       <div id="pointer">&#8598;</div>
-      <figcaption>Map of Sheridan's Trafalgar campus and surrounding area from <a href="https://www.openstreetmap.org/#map=17/43.466987/-79.698890">OpenStreetMap</a> under the <a href="openstreetmap.org/copyright">Open Database License</a></figcaption>
+      <figcaption>Map of Sheridan's Trafalgar campus and surrounding area from <a href="https://www.openstreetmap.org/#map=17/43.466987/-79.698890">OpenStreetMap</a> under the <a href="openstreetmap.org/copyright">Open Database Licence</a>. <span id="coords"></span></figcaption>
       </figure>
       <noscript><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></noscript>
       <script type="text/javascript" defer>
         const pos = {lat: 43.466987, long: -79.698890};
         const pointer = document.getElementById('pointer');
         const mapImage = document.getElementById('map-image');
+        const coordsout = document.getElementById('coords');
 
         function inverseLerp(min, max, value) {
             return (value - min) / (max - min);
@@ -55,8 +57,12 @@
             const yRel = inverseLerp(topLat, bottomLat, pos.lat);
 
             const rect = mapImage.getBoundingClientRect();
+            const parent = pointer.parentElement.getBoundingClientRect();
+            
             pointer.style.left = `${xRel * rect.width + rect.left}px`;
             pointer.style.top = `${yRel * rect.height + rect.top}px`;
+
+            coordsout.innerText = `(${pos.lat}, ${pos.long})`;
 
             requestAnimationFrame(updatePointer);
         }
@@ -77,7 +83,8 @@
 
             function startGPS() {
                 if ('geolocation' in navigator) {
-                    navigator.geolocation.watchPosition(geoSuccess, geoError)
+                    navigator.geolocation.watchPosition(geoSuccess, geoError);
+                    gpsbutton.classList.add('hidden');
                 } else {
                     console.log('Geolocation API not available.');
                 }
