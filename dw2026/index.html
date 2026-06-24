@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+    <head>
+        <title>Design Week Warm-Up</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charset="utf-8" />
+        <meta name="description" content="A warm-up activity to kick off Design Week 2026." />
+        <meta property="og:description" content="A warm-up activity to kick off Design Week 2026." />
+        <meta property="og:title" content="Design Week Warm-Up" />
+        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/index.html" />
+        <meta property="og:type" content="website" />
+        <style>
+            .map {
+                max-width: 100%;
+                padding: 0;
+            }
+            figure img {
+                max-width: 100%;
+            }
+
+            #pointer {
+                position: absolute;
+                z-index: 1;
+                left: 100px;
+                top: 20px;
+            }
+            .hidden { display: none;}
+
+        </style>
+    </head>
+    <body>
+      <button id="enable-gps" class="hidden" type="button">Enable GPS</button>
+      <figure class="map">
+      <img id="map-image" src="sheridan-map.jpg" alt="Map of Sheridan Campus">
+      <div id="pointer">&#8598;</div>
+      <figcaption>Map of Sheridan's Trafalgar campus and surrounding area from <a href="https://www.openstreetmap.org/#map=17/43.466987/-79.698890">OpenStreetMap</a> under the <a href="openstreetmap.org/copyright">Open Database License</a></figcaption>
+      </figure>
+      <noscript><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></noscript>
+      <script type="text/javascript" defer>
+        const pos = {lat: 43.466987, long: -79.698890};
+        const pointer = document.getElementById('pointer');
+        const mapImage = document.getElementById('map-image');
+
+        function inverseLerp(min, max, value) {
+            return (value - min) / (max - min);
+        }
+
+        function updatePointer() {
+            const leftLong = -79.711679;
+            const topLat = 43.472983;
+            const rightLong = -79.692153;
+            const bottomLat = 43.464854;
+
+            const xRel = inverseLerp(leftLong, rightLong, pos.long);
+            const yRel = inverseLerp(topLat, bottomLat, pos.lat);
+
+            const rect = mapImage.getBoundingClientRect();
+            pointer.style.left = `${xRel * rect.width + rect.left}px`;
+            pointer.style.top = `${yRel * rect.height + rect.top}px`;
+
+            requestAnimationFrame(updatePointer);
+        }
+        requestAnimationFrame(updatePointer);
+
+        (()=>{
+            gpsbutton = document.getElementById('enable-gps');
+
+            function geoSuccess(geopos) {
+                console.log(geopos);
+                pos.lat = geopos.coords.latitude;
+                pos.long = geopos.coords.longitude;
+            }
+
+            function geoError(errorInfo) {
+                console.log('Geolocation error:', errorInfo, {maximumAge: 2000, timeout: 5000, enableHighAccuracy: true});
+            }
+
+            function startGPS() {
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.watchPosition(geoSuccess, geoError)
+                } else {
+                    console.log('Geolocation API not available.');
+                }
+            }
+            gpsbutton.addEventListener('click', startGPS);
+
+            // Init function.
+            navigator.permissions.query({name: 'geolocation'}).then((result) => {
+                if (result.state === 'granted') {
+                    startGPS();
+                } else if (result.state === 'prompt') {
+                    gpsbutton.classList.remove('hidden');
+                }
+            });
+
+
+        })();
+        
+        
+      </script>
+      
+    </body>
+</html>
