@@ -1,0 +1,193 @@
+html {
+    min-width: 22rem;
+    overflow: auto;
+    --sblue: #003767;
+    --scyan: #00B2CE;
+    --slime:  #C6D931;
+    --srhod:  #D92880;
+}
+
+body {
+    
+    font-family: "Aktiv Grotesque", "Grotestque", sans-serif;
+    text-align: center;
+}
+
+a {
+    color: var(--scyan);
+}
+
+.hidden {
+    display: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+    font-family: "Produkt", "Verdana";
+    color: var(--sblue);
+}
+
+header {
+    margin-bottom: 2rem;
+}
+
+header * {
+    margin: 0;
+    
+}
+
+header p {
+    font-weight: bold;
+    font-size: 120%;
+    color: var(--scyan);
+}
+
+.content {
+    max-width: 25rem;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.callout {
+    
+    border: 2px solid var(--scyan);
+    border-radius: 1rem;
+    margin: 0.5rem 0;
+    justify-items: center;
+    padding-right: 1rem;
+}
+
+.callout > * {
+    grid-column: 2;
+}
+
+.warning, .info {
+    display: grid;
+    grid-template-columns: 1rem 1fr;
+    column-gap: 1rem;
+}
+
+.info::before {
+    content: "\1F6C8";
+    font-size: 220%;
+    height: 3rem;
+}
+
+.warning::before {
+    content: "\26A0 \FE0F";
+    font-size: 170%;
+    height: 2.5rem;
+}
+
+.warning::before, .info::before {
+    color: var(--scyan);
+    grid-column: 1;
+    background-color: white;
+    margin-top: 0.5rem;
+    margin-left: -1rem;    
+}
+
+.primary {
+    font-size: large;
+    font-weight: bold;
+    color: var(--srhod);
+}
+
+.fineprint {
+    font-size: small;
+    font-style: italic;
+}
+
+.buttonstyle {
+    display: block;
+    background-color: var(--srhod);
+    font-size: large;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 2rem 1rem 2rem;
+    border: 0;
+    margin: 0.5rem auto;
+}
+
+form {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+button.buttonstyle {
+    padding: 0.5rem 2rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+.buttonstyle:hover {
+    filter: brightness(110%);
+}
+
+.buttonstyle > .icon {
+    display: inline-block;
+    margin-right: 1rem;
+    transform: scale(2);
+}
+
+.animated {
+    transition: opacity 2s ease-out;
+}
+
+.toreveal {
+    opacity: 0;
+}
+
+.charbychar {
+    display: flex;
+    flex-direction: row;
+    margin: 0.5rem auto;
+    justify-content: center;
+    gap: 0.5rem;
+
+}
+
+.charbychar input {
+    width: 1.5rem;
+    height: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-transform: uppercase;
+}
+
+input {
+    border: 2px solid var(--scyan);
+    border-radius: 0.5rem;
+}
+
+input[type=text]:focus, input[type=number]:focus {
+    background-color: #cff;
+    border-color: var(--sblue);
+}
+
+form {
+    text-align: center;
+}
+
+form.solved input {
+    background-color: #0fa;
+    color: #0a5;
+    border-color: #0a5;
+}
+
+form.solved button {
+    background-color: #0a5;
+    cursor: default;
+    filter: none !important;
+}
+
+form.solved button::after {
+    content: "\2714";
+    margin-left: 1rem;
+}

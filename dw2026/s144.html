@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+    <head>
+        <meta charset="utf-8" />
+        <title>The Mystery of S144</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />        
+        <link href="puzstyles.css" rel="stylesheet">
+        <meta name="description" content="Part of a warm-up activity to kick off Design Week 2026." />
+        <meta property="og:description" content="Part of a warm-up activity to kick off Design Week 2026." />
+        <meta property="og:title" content="The Mystery of S144" />
+        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/s144.html" />
+        <meta property="og:type" content="website" />
+        <script type="module" src="puzutils.mjs"></script>
+    </head>
+    <body>
+      <div class="content">
+        <header>
+          <h2>The Mystery of Room S144</h2>
+        </header>
+        
+        <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
+
+        <p class="animated toreveal">Near the lab they call "the wedge", there is a mysterious room...</p>
+        <img class="animated toreveal" src="s144door.jpg" alt="The door of S144">
+        <p class="animated toreveal">Seek a <em>window</em> to see inside to reveal its secrets.</p>
+        <p class="animated toreveal">At the back, near the server racks, something unusual sits in a wire tray hanging from the ceiling.</p>
+        <p class="animated toreveal primary">What is the mysterious object?</p>
+        <form class="animated toreveal" autocomplete="off" action="" id="answer">
+          <div class="charbychar">
+            <input type="text" name="char1" maxlength="1" title="First letter"/>
+            <input type="text" name="char2" maxlength="1" title="Second letter"/>
+            <input type="text" name="char3" maxlength="1" title="Third letter"/>
+            <input type="text" name="char4" maxlength="1" title="Fourth letter"/>
+            <input type="text" name="char5" maxlength="1" title="Fifth letter"/>
+          </div>
+          <button class="buttonstyle" type="submit">Answer</button>
+        </form>
+              <div class="animated toreveal hidden" id="correct">
+      <h3>Correct!</h2>
+      <p>What's that doing there?</p>
+      <p>Now that we've warmed-up your sleuthing skills, it's time for a land acknowledgement.</p>
+      <a class="buttonstyle" href="land.html">Acknowledge</a>
+      </div>
+      <div class="animated toreveal hidden" id="incorrect">
+      <h3>Try Again!</h3>
+      <p>'<span id="attempt"></span>' is not the correct answer.</p>
+      </div>
+      
+      <section id="hints">
+        
+      </section>
+    </div>
+      
+
+
+
+      <script type="module" defer>
+        import { passphraseForms, stagedReveal } from './puzutils.mjs'
+        // Page-specific scripts go here.       
+        const answer = passphraseForms['answer'];
+        const correct = document.getElementById('correct');
+        const incorrect = document.getElementById('incorrect');
+
+        answer.addEventListener('submit', (e) => {
+          e.preventDefault();
+          if (answer.checkAnswer('crown')) {
+            incorrect.classList.add('hidden');
+            correct.classList.remove('hidden');
+            answer.classList.add('solved');
+            setTimeout(stagedReveal, 100);
+          } else {
+            incorrect.classList.remove('hidden');
+            correct.classList.add('hidden');
+            answer.classList.remove('solved');
+            
+            document.getElementById('attempt').innerText = answer.getValue();
+            setTimeout(stagedReveal, 100);
+          }
+        });
+      </script>  
+    </body>
+</html>
