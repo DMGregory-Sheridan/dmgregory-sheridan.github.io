@@ -21,7 +21,8 @@ function stagedReveal() {
 setTimeout(stagedReveal, revealtime);
 
 function isNumeric(c) {
-
+    const code = c.charCodeAt(0);
+    return (code > 47 && code < 58);   // numbers 0-9
 }
 
 function isAlphanumeric(c) {
@@ -33,6 +34,15 @@ function isAlphanumeric(c) {
 
 const passphraseForms = {};
 {    
+    function solve(form) {
+        form.classList.add('solved'); 
+        return true; 
+    }
+    function unsolve(form) {
+        form.classList.remove('solved'); 
+        return false; 
+    }
+
     // Find and set up letter-by-letter password inputs
     const passwords = document.getElementsByClassName('charbychar');
     for (const pass of passwords) {
@@ -50,38 +60,55 @@ const passphraseForms = {};
             return text;
         }
 
+        
+
         form.checkAnswer = (answer, silent) => {
-            console.log('checking answer...')
+            const text = form.getValue().trim().toUpperCase();
             if (typeof(answer) === 'string') {
                 answer = answer.trim().toUpperCase();
-                const text = form.getValue().trim().toUpperCase();
                 if (text === answer) {
                     console.log(`Submitted answer '${text}' is correct!`);
-                    return true;
+                    form.classList.add('solved');
+                    return solve(form);
                 }
-                if (!silent)
+                if (!silent) {
                     console.log(`Submitted answer '${text}' does not match the correct answer.`);
+                    unsolve(form);
+                }
                 return false;
             }
             
             if (Array.isArray(answer)) {
                 for(const value of answer) {
                     if (form.checkAnswer(value, true)) {
-                        return true;
+                        return solve(form);
                     }
                 }
                 console.log(`Submitted answer '${text}' does not match any of the correct answers.`);
+                return unsolve(form);
+            }
+
+            if (typeof(answer) === 'function') {
+                if(answer(text)) {
+                    console.log(`Submitted answer '${text}' satisfies the solution function!`);
+                    return solve(form);
+                } else if (!silent) {
+                    console.log(`Submitted answer '${text}' does not satisfy the solution function.`);
+                    return unsolve(form);
+                }
                 return false;
             }
 
             // Otherwise, assume answer is a regular expression.
             if (typeof(answer) === 'object' && 'test' in answer.keys) {
-                const text = form.getValue().trim().toUpperCase();
                 if (answer.test(text)) {
                     console.log(`Submitted answer '${text}' correctly matches the pattern!`);
-                } else {
+                    return solve(form);
+                } else if(!silent) {
                     console.log(`Submitted answer '${text}' does not match the answer pattern.`);
+                    return unsolve(form);
                 }
+                return false;
             }
 
             console.log('Unsupported answer type:', answer);
@@ -108,10 +135,11 @@ const passphraseForms = {};
             } else if (e.key.length === 1) {
                 let valid = false;
 
-                if (char.type === 'number' && isNumeric(e.key)) {
-                    valid = true;                    
-                } else if (char.type === 'text' && isAlphanumeric(e.key)) {
-                    valid = true;
+                if (char.getAttribute('inputmode') === 'numeric') {
+                    valid = isNumeric(e.key);                    
+                } else {
+                    console.log(char.getAttribute('inputmode') );
+                    valid = isAlphanumeric(e.key);
                 }
                 if (valid) {
                     char.value = e.key.toUpperCase();
