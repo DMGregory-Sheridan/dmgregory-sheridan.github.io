@@ -42,6 +42,27 @@ const passphraseForms = {};
         form.classList.remove('solved'); 
         return false; 
     }
+    function getKey(e) {
+        if (e.key) return e.key;
+
+        const code = e.keyCode;
+        switch (code) {
+            case 8: return 'Backspace';
+            case 9: return 'Tab';
+            case 13: return 'Enter';
+            case 37: return 'ArrowLeft';
+            case 39: return 'ArrowRight';
+            case 46: return 'Delete';
+
+            default: 
+                if ((code > 47 && code < 58)   // numbers 0-9
+                 || (code > 64 && code < 91)   // uppercase A-Z
+                 || (code > 96 && code < 123) ) {
+                    return String.fromCharCode(code);
+                 }
+        }
+        return " ";
+    }
 
     // Find and set up letter-by-letter password inputs
     const passwords = document.getElementsByClassName('charbychar');
@@ -114,8 +135,25 @@ const passphraseForms = {};
             console.log('Unsupported answer type:', answer);
         }
 
+        const processInput = (e) => {
+            const char = e.currentTarget;
+
+            if (e.data.length == 1) {
+                char.value = data;
+                if (char.index < chars.length - 1) {
+                    chars[char.index + 1].focus();
+                }
+            }
+        }
+
         const processKeypress = (e) => {
             const char = e.currentTarget;
+            if (e.key === undefined || e.key === 'Unidentified') {
+                return false;
+            }
+            if (e.key === 'Tab') {
+                return true;
+            }
             if (e.key === 'Backspace') {
                 if (char.value) {
                     console.log('Erasing:', char.value, char.value.charCodeAt(0));
@@ -180,6 +218,7 @@ const passphraseForms = {};
             
             char.index = i;
             char.addEventListener('keydown', processKeypress);
+            char.addEventListener('input', processInput)
             if (i < char.length-1) {
                 
             }
