@@ -31,11 +31,11 @@ h4, h5, h6 {
     color: var(--sblue);
 }
 
-header {
+body header {
     margin-bottom: 2rem;
 }
 
-header * {
+body header * {
     margin: 0;
     
 }
@@ -52,13 +52,14 @@ header p {
     padding: 1rem;
 }
 
+article,
 .callout {
     
     border: 2px solid var(--scyan);
     border-radius: 1rem;
     margin: 0.5rem 0;
     justify-items: center;
-    padding-right: 1rem;
+    padding: 1rem;
 }
 
 .callout > * {
@@ -69,6 +70,7 @@ header p {
     display: grid;
     grid-template-columns: 1rem 1fr;
     column-gap: 1rem;
+    padding: 0 1rem 0 0;
 }
 
 .info::before {
@@ -168,7 +170,7 @@ input {
 
 input[type=text]:focus, input[type=number]:focus {
     background-color: #cff;
-    border-color: var(--sblue);
+    border-color: var(--scyan);
 }
 
 form {
@@ -190,4 +192,43 @@ form.solved button {
 form.solved button::after {
     content: "\2714";
     margin-left: 1rem;
+}
+
+
+.fold-out {
+    margin-top: 2rem;
+}
+
+.fold-out header {
+    display: block;
+    font-size: large;
+    color: var(--scyan);
+    font-weight: bold;
+    cursor: pointer;
+    width:100%;
+    margin-bottom: 0;
+}
+
+.fold-out header::after {
+    content: "\276f";
+    margin-left: 1rem;
+    display: inline-block;
+    transition: transform 1s;
+    transform-origin: center;
+    rotate: 90deg;
+}
+
+.fold-out > div {
+    transition: max-height 1s ease-out;
+    overflow: hidden;
+    max-height: 50rem;
+    margin: 0;
+}
+
+.fold-out.collapsed > div {
+    max-height: 0;
+}
+
+.fold-out.collapsed header::after {
+    rotate: 0deg;
 }

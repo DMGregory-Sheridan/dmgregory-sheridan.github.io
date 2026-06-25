@@ -47,7 +47,20 @@
       </div>
       
       <section id="hints">
-        
+        <article class="fold-out animated toreveal collapsed">
+          <header>I need a hint</header>
+          <div>
+            <p>On the ramp between the SCAET's first floor and the auditorium, you'll find a window that looks into this room.</p>
+            <img src="s144window.jpg" alt="Window looking into S144">
+          </div>
+        </article>
+        <article class="fold-out animated toreveal collapsed">
+          <header>I need another hint</header>
+          <div>
+            <p>Look in the window and you should see this...</p>
+            <img src="s144item.jpg" alt="A Burger King crown in a hanging wire rack,">
+          </div>
+        </article>
       </section>
     </div>
       
@@ -64,10 +77,12 @@
         answer.addEventListener('submit', (e) => {
           e.preventDefault();
           if (answer.checkAnswer('crown')) {
+            // Correct answer!
             incorrect.classList.add('hidden');
             correct.classList.remove('hidden');
             answer.classList.add('solved');
             setTimeout(stagedReveal, 100);
+            document.getElementById('hints').classList.add('hidden');
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');

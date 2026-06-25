@@ -159,4 +159,24 @@ const passphraseForms = {};
     }
 }
 
+{
+    const folds = document.getElementsByClassName('fold-out');
+
+    function toggleFold(e) {
+        console.log('Toggling fold');
+        const parent = e.currentTarget.parentElement;
+        if (parent.classList.contains('collapsed')) {
+            parent.classList.remove('collapsed');
+        } else {
+            parent.classList.add('collapsed');
+        }
+    }
+
+    for (const fold of folds) {
+        const header = fold.getElementsByTagName('header')[0];
+        console.log('adding foldout handler to', header);
+        header.addEventListener('click', toggleFold);
+    }
+}
+
 export {stagedReveal, passphraseForms};
