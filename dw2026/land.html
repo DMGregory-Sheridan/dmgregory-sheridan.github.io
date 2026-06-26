@@ -14,6 +14,7 @@
         <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/land.html" />
         <meta property="og:type" content="website" />
         <script type="module" src="puzutils.mjs"></script>
+        <script type="module" src="geopuzzle.mjs"></script>
     </head>
     <body>
       <div class="content">
@@ -25,17 +26,17 @@
 
         <p class="animated toreveal">Leave the SCAET building through the door by the elevator on the first floor.</p>        
         <p class="animated toreveal">Head toward the grey (formerly rainbow) bridge on the way to the SSU.</p>
-        <div class="geo animated toreveal">
-          <div id="needPermission">
-            <button id="enableGPS">Enable GPS</button><button id="skipGPS">Skip</button>
+        <div class="callout widget animated toreveal">
+          <button id="enableGPS" class="gps fullwidth">Enable GPS</button>
+          <div id="havePermission" class="rowlockup hidden">
+            <img src="satellite.gif" alt="Animated GPS satellite icon" width="80">
+            <span id="readout" class="readout">Range</span></p>
           </div>
-          <div id="havePermission">
-          <p></p>
-          </div>
+          <button id="skipGPS" class="skip fullwidth">Skip</button>
         </div>
-        <p class="animated toreveal hidden">Seek wisdom from an eagle about the treaty that governs how we share this land.</p>
-        <p class="animated toreveal primary hidden">In what year was the treaty signed?</p>
-        <form class="animated toreveal hidden" autocomplete="off" action="" id="answer">
+        <p class="animated toreveal hidden postGPS">Seek wisdom from an eagle about the treaty that governs how we share this land.</p>
+        <p class="animated toreveal primary hidden postGPS">In what year was the treaty signed?</p>
+        <form class="animated toreveal hidden postGPS" autocomplete="off" action="" id="answer">
           <div class="charbychar">
             <input type="text" name="char1" maxlength="1" inputmode="numeric" title="First digit"/>
             <input type="text" name="char2" maxlength="1" inputmode="numeric" title="Second digit"/>
@@ -47,9 +48,13 @@
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
         <p class="primary">We are all treaty people.</p>
+        <!--
         <p>You can return here any time and scan the QR code to learn more.</p>
-        <p>Next, head north-east tpward ceremonial road...</p>
+        <p>Next, head north-east toward ceremonial road...</p>
+
         <a class="buttonstyle" href="flags.html">Finding Flags</a>
+        -->
+        <p>Scan the QR code on the <strong>back</strong> of the sign to proceed...</p>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
         <h3>Try Again!</h3>
@@ -57,7 +62,7 @@
       </div>
       
       <section id="hints">
-        <article class="fold-out animated toreveal collapsed">
+        <article class="fold-out animated toreveal collapsed hidden postGPS">
           <header>I need a hint</header>
           <div>
             <p>Look for this sign:</p>
@@ -66,14 +71,59 @@
           </div>
         </article>
       </section>
-    </div>
-      
 
+      <br>
+      <div class="callout info animated toreveal">
+        <p><a href="https://www.flaticon.com/free-animated-icons/satellite" title="satellite animated icons">Satellite animated icon<br/>created by Freepik -&nbsp;Flaticon</a></p>
+      </div>
+    </div>
+    
 
 
       <script type="module" defer>
+        // Page-specific scripts go here.  
         import { passphraseForms, stagedReveal } from './puzutils.mjs'
-        // Page-specific scripts go here.       
+        import { gpsRanger } from './geopuzzle.mjs'
+
+        const readout = document.getElementById('readout');
+
+        function onEnableGPS() {
+          document.getElementById('havePermission').classList.remove('hidden');
+        }
+
+        function onGPSError(err) {
+          switch(err.code) {
+            case GeolocationPositionError.PERMISSION_DENIED: readout.innerText = "No Permission"; break;
+            case GeolocationPositionError.POSITION_UNAVAILABLE: readout.innerText = "Unavailable"; break;
+            case GeolocationPositionError.TIMEOUT: readout.innerText = "Timeout"; break;
+            default: readout.innerText = "Unknown Error";
+          }
+          console.log('Geopositioning error:', err);
+        }
+
+        function onRangeUpdate(range, closest) {
+          readout.innerText = `${range.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})} m`;
+        } 
+
+        function onArrive(destination) {
+          const toReveal = document.getElementsByClassName('postGPS');
+          for (const element of toReveal) {
+            element.classList.remove('hidden');
+          }
+          stagedReveal();
+        }
+
+        const ranger = new gpsRanger(
+          document.getElementById('enableGPS'),
+          document.getElementById('skipGPS'),
+          onEnableGPS,
+          onGPSError,
+          onRangeUpdate,
+          onArrive
+        );
+
+        ranger.setDestination({latitude: 43.469086908453306, longitude: -79.69921232050761});
+             
         const answer = passphraseForms['answer'];
         const correct = document.getElementById('correct');
         const incorrect = document.getElementById('incorrect');

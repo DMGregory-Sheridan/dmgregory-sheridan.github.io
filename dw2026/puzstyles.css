@@ -18,7 +18,7 @@ a {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 img {
@@ -74,9 +74,9 @@ article,
 }
 
 .info::before {
-    content: "\1F6C8";
+    content: "\24d8";
     font-size: 220%;
-    height: 3rem;
+    height: 2.5rem;
 }
 
 .warning::before {
@@ -104,16 +104,18 @@ article,
     font-style: italic;
 }
 
+button,
 .buttonstyle {
-    display: block;
+    display: inline-block;
     background-color: var(--srhod);
     font-size: large;
     font-weight: bold;
     color: white;
     text-decoration: none;
     padding: 0.8rem 2rem 1rem 2rem;
-    border: 0;
+    border: 2px solid white;
     margin: 0.5rem auto;
+    cursor: pointer;
 }
 
 form {
@@ -121,12 +123,11 @@ form {
     flex-direction: column;
 }
 
-button.buttonstyle {
-    padding: 0.5rem 2rem;
+.fullwidth {
     width: 100%;
-    cursor: pointer;
 }
 
+button:hover,
 .buttonstyle:hover {
     filter: brightness(110%);
 }
@@ -231,4 +232,42 @@ form.solved button::after {
 
 .fold-out.collapsed header::after {
     rotate: 0deg;
+}
+
+.gps::before {
+    content: "\1F6F0  ";
+}
+
+.skip {
+    background-color: grey;
+}
+
+.skip::before {
+    content: "\2718  "
+}
+
+.widget {
+    border-color: var(--srhod);
+    display: flex;
+    flex-direction: column;
+    padding: 0.7rem;
+    gap: 0.2rem;
+}
+
+.widget * {
+    margin: 0;
+}
+
+.rowlockup {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+}
+
+.readout {
+    font-size: 300%;
+    color: var(--srhod);
+    font-weight: bold;
 }

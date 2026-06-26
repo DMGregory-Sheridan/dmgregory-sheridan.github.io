@@ -11,23 +11,21 @@
         <meta name="description" content="Part of a warm-up activity to kick off Design Week 2026." />
         <meta property="og:description" content="Part of a warm-up activity to kick off Design Week 2026." />
         <meta property="og:title" content="The Mystery of S144" />
-        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/s144.html" />
+        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/drop.html" />
         <meta property="og:type" content="website" />
         <script type="module" src="puzutils.mjs"></script>
     </head>
     <body>
       <div class="content">
         <header>
-          <h2>The Mystery of Room S144</h2>
+          <h2>The Drop-Off</h2>
         </header>
         
         <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
 
-        <p class="animated toreveal">Near the lab they call "the wedge", there is a mysterious room...</p>
-        <img class="animated toreveal" src="s144door.jpg" alt="The door of S144">
-        <p class="animated toreveal">Seek a <em>window</em> to see inside and discover its secrets.</p>
-        <p class="animated toreveal">At the back, near the server racks, something unusual and out-of-place sits in a wire tray hanging from the ceiling.</p>
-        <p class="animated toreveal primary">What is the mysterious object?</p>
+        <p class="animated toreveal">Return to the SCAET main entrance from Ceremonial Road.</p>
+        <p class="animated toreveal">Seek the place where the world's largest river drops off.</p>
+        <p class="animated toreveal primary">What is its name?</p>
         <form class="animated toreveal" autocomplete="off" action="" id="answer">
           <div class="charbychar">
             <input type="text" name="char1" maxlength="1" title="First letter"/>
@@ -40,9 +38,7 @@
         </form>
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
-        <p>What's that doing there?</p>
-        <p>Now that we've warmed-up your sleuthing skills, it's time for a land acknowledgement:</p>
-        <a class="buttonstyle" href="land.html">Acknowledge</a>
+        <p class="primary">Return to S139 to begin your Design Week</p>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
         <h3>Try Again!</h3>
@@ -53,15 +49,13 @@
         <article class="fold-out animated toreveal collapsed">
           <header>I need a hint</header>
           <div>
-            <p>On the ramp between the SCAET's first floor and the auditorium, you'll find a window that looks into this room.</p>
-            <img src="s144window.jpg" alt="Window looking into S144">
+            <p>The world's largest river (by volume of discharge) is the <em>Amazon</em>.</p>
           </div>
         </article>
         <article class="fold-out animated toreveal collapsed">
           <header>I need another hint</header>
           <div>
-            <p>Look in the window and you should see this...</p>
-            <img src="s144item.jpg" alt="A Burger King crown in a hanging wire rack,">
+            <p>"Drops off" = "delivers".</p>
           </div>
         </article>
       </section>
@@ -79,7 +73,7 @@
 
         answer.addEventListener('submit', (e) => {
           e.preventDefault();
-          if (answer.checkAnswer('crown')) {
+          if (answer.checkAnswer('hurry')) {
             // Correct answer!
             incorrect.classList.add('hidden');
             correct.classList.remove('hidden');
