@@ -26,7 +26,7 @@
 
         <p class="animated toreveal">Leave the SCAET building through the door by the elevator on the first floor.</p>        
         <p class="animated toreveal">Head toward the grey (formerly rainbow) bridge on the way to the SSU.</p>
-        <div class="callout widget animated toreveal">
+        <div class="callout widget animated toreveal" id="gpsWidget">
           <button id="enableGPS" class="gps fullwidth">Enable GPS</button>
           <div id="havePermission" class="rowlockup hidden">
             <img src="satellite.gif" alt="Animated GPS satellite icon" width="80">
@@ -107,10 +107,13 @@
 
         function onArrive(destination) {
           const toReveal = document.getElementsByClassName('postGPS');
+          readout.innerText = 'Arrived';
           for (const element of toReveal) {
             element.classList.remove('hidden');
           }
           stagedReveal();
+          document.getElementById('gpsWidget').classList.add('solved');
+          return true; // Stops the ranger from continuing to update.
         }
 
         const ranger = new gpsRanger(

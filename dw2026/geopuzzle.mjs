@@ -15,6 +15,7 @@ class gpsRanger {
     onRangeUpdate;
     onArrive;
     #arrivedAt;
+    #watchID = -1;
 
     // TODO: add success handler (switch permissions to content, begin querying updates).
     // TODO: add distance update handler.
@@ -23,11 +24,22 @@ class gpsRanger {
         this.onRangeUpdate = onRangeUpdate;
         this.onArrive = onArrive;
 
-        skipButton.addEventListener('click', onArrive);
+        skipButton.addEventListener('click', () => {
+            if (this.#watchID === -1) {
+                enableButton.classList.add('hidden');
+                onEnable();
+            }
+            onArrive()
+        });
 
         const startGPS = () => {
+            
+            if (this.#watchID !== -1) {
+                console.log(`Error: there's already a watchPosition in progress.`);
+                return;
+            }
             enableButton.classList.add('hidden');
-            navigator.geolocation.watchPosition(this.onGeoUpdate.bind(this), onError, {maximumAge: 2000, timeout: 5000, enableHighAccuracy: true} );
+            this.#watchID = navigator.geolocation.watchPosition(this.onGeoUpdate.bind(this), onError, {maximumAge: 2000, timeout: 5000, enableHighAccuracy: true} );
             onEnable();
         };
 
@@ -61,12 +73,14 @@ class gpsRanger {
 
         if (closest && minDistance <= closest.tolerance && this.#arrivedAt !== closest) {
             this.#arrivedAt = closest;
-            this.onArrive(closest);
+            if (this.onArrive(closest)) {
+                navigator.geolocation.clearWatch(this.#watchID);
+            }
         }
     }
 
     setDestination(latlong) {
-        if (!latlong.tolerance) latlong.tolerance = 5;
+        if (!latlong.tolerance) latlong.tolerance = 7;
         this.#destinations = [latlong];
     }
 

@@ -5,6 +5,8 @@ html {
     --scyan: #00B2CE;
     --slime:  #C6D931;
     --srhod:  #D92880;
+    --green: #0a5;
+    --paleGreen: #0fa;
 }
 
 body {
@@ -179,13 +181,13 @@ form {
 }
 
 form.solved input {
-    background-color: #0fa;
-    color: #0a5;
-    border-color: #0a5;
+    background-color: var(--paleGreen);
+    color: var(--green);
+    border-color: var(--green);
 }
 
 form.solved button {
-    background-color: #0a5;
+    background-color: var(--green);
     cursor: default;
     filter: none !important;
 }
@@ -195,6 +197,13 @@ form.solved button::after {
     margin-left: 1rem;
 }
 
+.widget.solved {
+    border-color: var(--green);
+}
+
+.solved .readout {
+    color: var(--green);
+}
 
 .fold-out {
     margin-top: 2rem;
