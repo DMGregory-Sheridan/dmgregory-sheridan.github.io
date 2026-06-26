@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <title>Land Acknowledgement</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />        
+        <meta name="viewport" content="width=device-width, initial-scale=1" />    
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap" rel="stylesheet">    
         <link href="puzstyles.css" rel="stylesheet">
         <meta name="description" content="Part of a warm-up activity to kick off Design Week 2026." />
         <meta property="og:description" content="Part of a warm-up activity to kick off Design Week 2026." />
@@ -22,9 +25,17 @@
 
         <p class="animated toreveal">Leave the SCAET building through the door by the elevator on the first floor.</p>        
         <p class="animated toreveal">Head toward the grey (formerly rainbow) bridge on the way to the SSU.</p>
-        <p class="animated toreveal">Seek wisdom from an eagle about the treaty that governs how we share this land.</p>
-        <p class="animated toreveal primary">In what year was the treaty signed?</p>
-        <form class="animated toreveal" autocomplete="off" action="" id="answer">
+        <div class="geo animated toreveal">
+          <div id="needPermission">
+            <button id="enableGPS">Enable GPS</button><button id="skipGPS">Skip</button>
+          </div>
+          <div id="havePermission">
+          <p></p>
+          </div>
+        </div>
+        <p class="animated toreveal hidden">Seek wisdom from an eagle about the treaty that governs how we share this land.</p>
+        <p class="animated toreveal primary hidden">In what year was the treaty signed?</p>
+        <form class="animated toreveal hidden" autocomplete="off" action="" id="answer">
           <div class="charbychar">
             <input type="text" name="char1" maxlength="1" inputmode="numeric" title="First digit"/>
             <input type="text" name="char2" maxlength="1" inputmode="numeric" title="Second digit"/>
@@ -33,16 +44,16 @@
           </div>
           <button class="buttonstyle" type="submit">Answer</button>
         </form>
-              <div class="animated toreveal hidden" id="correct">
-      <h3>Correct!</h2>
-      <p>We are all treaty people.</p>
-      <p>You can return here any time and scan the QR code to learn more.</p>
-      <p>Next, head north-east tpward ceremonial road...</p>
-      <a class="buttonstyle" href="flags.html">Finding Flags</a>
+      <div class="animated toreveal hidden" id="correct">
+        <h3>Correct!</h2>
+        <p class="primary">We are all treaty people.</p>
+        <p>You can return here any time and scan the QR code to learn more.</p>
+        <p>Next, head north-east tpward ceremonial road...</p>
+        <a class="buttonstyle" href="flags.html">Finding Flags</a>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
-      <h3>Try Again!</h3>
-      <p>'<span id="attempt"></span>' is not the correct answer.</p>
+        <h3>Try Again!</h3>
+        <p>'<span id="attempt"></span>' is not the correct answer.</p>
       </div>
       
       <section id="hints">
@@ -73,14 +84,14 @@
             // Correct answer!
             incorrect.classList.add('hidden');
             correct.classList.remove('hidden');
-            setTimeout(stagedReveal, 100);
+            stagedReveal();
             document.getElementById('hints').classList.add('hidden');
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');
             
             document.getElementById('attempt').innerText = answer.getValue();
-            setTimeout(stagedReveal, 100);
+            stagedReveal();
           }
         });
       </script>  

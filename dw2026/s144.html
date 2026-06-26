@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8" />
         <title>The Mystery of S144</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />        
+        <meta name="viewport" content="width=device-width, initial-scale=1" />  
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap" rel="stylesheet">      
         <link href="puzstyles.css" rel="stylesheet">
         <meta name="description" content="Part of a warm-up activity to kick off Design Week 2026." />
         <meta property="og:description" content="Part of a warm-up activity to kick off Design Week 2026." />
@@ -35,15 +38,15 @@
           </div>
           <button class="buttonstyle" type="submit">Answer</button>
         </form>
-              <div class="animated toreveal hidden" id="correct">
-      <h3>Correct!</h2>
-      <p>What's that doing there?</p>
-      <p>Now that we've warmed-up your sleuthing skills, it's time for a land acknowledgement:</p>
-      <a class="buttonstyle" href="land.html">Acknowledge</a>
+      <div class="animated toreveal hidden" id="correct">
+        <h3>Correct!</h2>
+        <p>What's that doing there?</p>
+        <p>Now that we've warmed-up your sleuthing skills, it's time for a land acknowledgement:</p>
+        <a class="buttonstyle" href="land.html">Acknowledge</a>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
-      <h3>Try Again!</h3>
-      <p>'<span id="attempt"></span>' is not the correct answer.</p>
+        <h3>Try Again!</h3>
+        <p>'<span id="attempt"></span>' is not the correct answer.</p>
       </div>
       
       <section id="hints">
@@ -80,14 +83,14 @@
             // Correct answer!
             incorrect.classList.add('hidden');
             correct.classList.remove('hidden');
-            setTimeout(stagedReveal, 100);
+            stagedReveal();
             document.getElementById('hints').classList.add('hidden');
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');
             
             document.getElementById('attempt').innerText = answer.getValue();
-            setTimeout(stagedReveal, 100);
+            stagedReveal();
           }
         });
       </script>  

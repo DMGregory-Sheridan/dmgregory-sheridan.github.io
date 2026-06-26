@@ -1,7 +1,19 @@
 const DEFAULT_REVEAL_DELAY = 500;
 let revealtime = DEFAULT_REVEAL_DELAY;
+let revealPending = false;
 
-function stagedReveal() {
+function stagedReveal(timeOverride) {
+    if (revealPending) return;
+    revealPending = true;
+
+    if (typeof(timeOverride) === 'number')
+        setTimeout(revealStep, timeOverride);
+    else 
+        setTimeout(revealStep, 10);
+}
+
+function revealStep() {
+   revealPending = false;
    const revelations = Array.from(document.getElementsByClassName('toreveal')).filter(element => !element.classList.contains('hidden'));
    const count = revelations.length;
 
@@ -12,13 +24,16 @@ function stagedReveal() {
 
    revelations[0].classList.remove('toreveal');
 
-   revealtime += 200;
+   revealtime = Math.min(revealtime + 200, 1000);
 
-   if (count > 1) setTimeout(stagedReveal, revealtime)
-   else revealtime = DEFAULT_REVEAL_DELAY;
+   if (count > 1) {
+    stagedReveal(revealtime);
+   } else {
+    revealtime = DEFAULT_REVEAL_DELAY;
+   }
 }
 
-setTimeout(stagedReveal, revealtime);
+stagedReveal(DEFAULT_REVEAL_DELAY);
 
 function isNumeric(c) {
     const code = c.charCodeAt(0);
@@ -148,7 +163,8 @@ const passphraseForms = {};
 
         const processKeypress = (e) => {
             const char = e.currentTarget;
-            if (e.key === undefined || e.key === 'Unidentified') {
+            if (e.key === undefined || e.key === 'Unidentified' || e.keyCode === 229) {
+                if (char.value) char.value = '';
                 return false;
             }
             if (e.key === 'Tab') {
@@ -156,10 +172,8 @@ const passphraseForms = {};
             }
             if (e.key === 'Backspace') {
                 if (char.value) {
-                    console.log('Erasing:', char.value, char.value.charCodeAt(0));
                     char.value = '';
                 } else if (char.index > 0) {
-                    console.log('Erasing nothing:', char.value, char.value.charCodeAt(0));
                     const prev = chars[char.index - 1];
                     prev.focus();
                     if (prev.value) {
@@ -176,7 +190,6 @@ const passphraseForms = {};
                 if (char.getAttribute('inputmode') === 'numeric') {
                     valid = isNumeric(e.key);                    
                 } else {
-                    console.log(char.getAttribute('inputmode') );
                     valid = isAlphanumeric(e.key);
                 }
                 if (valid) {
@@ -218,10 +231,7 @@ const passphraseForms = {};
             
             char.index = i;
             char.addEventListener('keydown', processKeypress);
-            char.addEventListener('input', processInput)
-            if (i < char.length-1) {
-                
-            }
+            char.addEventListener('input', processInput);
         }
     }
 }
@@ -230,7 +240,6 @@ const passphraseForms = {};
     const folds = document.getElementsByClassName('fold-out');
 
     function toggleFold(e) {
-        console.log('Toggling fold');
         const parent = e.currentTarget.parentElement;
         if (parent.classList.contains('collapsed')) {
             parent.classList.remove('collapsed');
@@ -241,7 +250,6 @@ const passphraseForms = {};
 
     for (const fold of folds) {
         const header = fold.getElementsByTagName('header')[0];
-        console.log('adding foldout handler to', header);
         header.addEventListener('click', toggleFold);
     }
 }
