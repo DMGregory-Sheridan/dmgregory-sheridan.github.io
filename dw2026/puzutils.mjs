@@ -1,3 +1,5 @@
+
+//#region Reveal Animations
 const DEFAULT_REVEAL_DELAY = 500;
 let revealtime = DEFAULT_REVEAL_DELAY;
 let revealPending = false;
@@ -34,7 +36,9 @@ function revealStep() {
 }
 
 stagedReveal(DEFAULT_REVEAL_DELAY);
+//#endregion Reveal Animations
 
+//#region Password Widgets
 function isNumeric(c) {
     const code = c.charCodeAt(0);
     return (code > 47 && code < 58);   // numbers 0-9
@@ -151,12 +155,18 @@ const passphraseForms = {};
         }
 
         const processInput = (e) => {
-            const char = e.currentTarget;
+            let char = e.currentTarget;
 
-            if (e.data.length == 1) {
-                char.value = data;
-                if (char.index < chars.length - 1) {
-                    chars[char.index + 1].focus();
+            if (e.data && e.data.length) {
+                const typedChars = Array.from(e.data);
+                while (typedChars.length > 0) {
+                    char.value = typedChars.shift();
+                    if (char.index < chars.length - 1) {
+                        char = chars[char.index + 1]
+                        char.focus();
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -235,7 +245,9 @@ const passphraseForms = {};
         }
     }
 }
+//#endregion Password Widgets
 
+//#region Fold-Outs
 {
     const folds = document.getElementsByClassName('fold-out');
 
@@ -253,5 +265,95 @@ const passphraseForms = {};
         header.addEventListener('click', toggleFold);
     }
 }
+//#endregion Fold-Outs
 
-export {stagedReveal, passphraseForms};
+//#region Variable Storage
+let storage;
+let storageError = 'Storage unavailable';
+
+{
+    // Validate storage:
+    // Adapted from MDN example.
+    function tryUseStorage(storageType)  {
+        try {
+            storage = window[storageType];
+            if (!storage) return false;
+            const x = '__storage_test__';
+            storage.setItem[x, x];
+            storage.removeItem(x);
+            return true;
+        } catch (e) {
+            storageError = e.message;
+            return false;
+        }
+    }
+
+    if (!tryUseStorage('localStorage')) {
+        if (!tryUseStorage('sessionStorage'))
+            storage = false;
+    }
+}
+
+const puzvarKey = 'puzzleVariables';
+let puzvars = {};
+if (storage) { 
+    const varText = storage.getItem(puzvarKey);
+    if (varText) {
+        puzvars = JSON.parse(varText);
+    }
+}
+
+function saveAllVariables(onError) {
+    if (!storage) {
+        onError(storageError);
+        return false;
+    }
+    try {
+        storage.setItem(puzvarKey, JSON.stringify(puzvars));
+    } catch (e) {
+        onError(e.message);
+        return false;
+    }
+    return true;
+}
+
+function setVar(key, value, onError) {
+    if (!storage) {
+        onError(storageError);
+        return false;
+    }
+
+    puzvars[key] = value;
+    return saveAllVariables(onError);
+}
+
+function getVar(key, defaultValue, onError) {
+    if (!storage) {
+        onError(storageError)
+        return false;
+    }
+
+    if (key in puzvars) return puzvars[key];
+    return defaultValue;
+}
+
+function unsetVar(key, onError) {
+    if (!storage) {
+        onError(storageError);
+        return false;
+    }
+
+    delete puzvars[key];
+    return saveAllVariables(onError);
+}
+
+function clearAllVariables() {
+    if (!storage) return;
+
+    puzvars = {};
+    storage.remove(puzvarKey);
+}
+//#endregion Variable Storage
+
+
+export {stagedReveal, passphraseForms, setVar, getVar, unsetVar, clearAllVariables};
