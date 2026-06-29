@@ -18,9 +18,15 @@
     </head>
     <body>
       <div class="content">
+        <div class="callout">
+          <h4>Inventory</h4>
+          <ul class="inventory"></ul>
+        </div>
+
         <header>
           <h2>Land Acknowledgement</h2>
         </header>
+
         
         <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
 
@@ -48,6 +54,11 @@
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
         <p class="primary">We are all treaty people.</p>
+
+        <div class="callout toast">
+          <p>You got:</p>
+          <p class="primary" title="A guardian eagle">&#x1F985;</p>
+        </div>
 
         <p>You can return here any time and scan the QR code to learn more.</p>
 
@@ -80,7 +91,7 @@
 
 
       <script type="module" defer>        
-        import { passphraseForms, stagedReveal } from './puzutils.mjs';
+        import { passphraseForms, stagedReveal, inventory } from './puzutils.mjs';
         import { gpsRanger } from './geopuzzle.mjs';
 
         // Page-specific scripts go here.  
@@ -138,6 +149,8 @@
             correct.classList.remove('hidden');
             stagedReveal();
             document.getElementById('hints').classList.add('hidden');
+
+            inventory.addUnique('eagle', {display: '\uD83E\uDD85', tooltip: 'A guardian eagle.'});
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');

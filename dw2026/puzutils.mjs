@@ -268,10 +268,18 @@ const passphraseForms = {};
 //#endregion Fold-Outs
 
 //#region Variable Storage
-let storage;
-let storageError = 'Storage unavailable';
-
+const puzzleVariables = {};
 {
+    const puzvarKey = 'puzzleVariables';
+    let puzvarCache = {};
+
+    let storage;
+    let storageError = 'Storage unavailable';
+
+    function logErrorToConsole(err) {
+        console.log('Error with puzzle variable storage:', err);
+    }
+
     // Validate storage:
     // Adapted from MDN example.
     function tryUseStorage(storageType)  {
@@ -284,6 +292,7 @@ let storageError = 'Storage unavailable';
             return true;
         } catch (e) {
             storageError = e.message;
+            console.log('Error using storage:', e);
             return false;
         }
     }
@@ -292,68 +301,162 @@ let storageError = 'Storage unavailable';
         if (!tryUseStorage('sessionStorage'))
             storage = false;
     }
-}
 
-const puzvarKey = 'puzzleVariables';
-let puzvars = {};
-if (storage) { 
-    const varText = storage.getItem(puzvarKey);
-    if (varText) {
-        puzvars = JSON.parse(varText);
-    }
-}
-
-function saveAllVariables(onError) {
-    if (!storage) {
-        onError(storageError);
-        return false;
-    }
-    try {
-        storage.setItem(puzvarKey, JSON.stringify(puzvars));
-    } catch (e) {
-        onError(e.message);
-        return false;
-    }
-    return true;
-}
-
-function setVar(key, value, onError) {
-    if (!storage) {
-        onError(storageError);
-        return false;
+    if (storage) { 
+        const varText = storage.getItem(puzvarKey);
+        if (varText) {
+            puzvarCache = JSON.parse(varText);
+            console.log('Successfully loaded puzzle variables:', puzvarCache);
+        } else {
+            console.log('No saved puzzle variables found.');
+        }
+    } else {
+        console.log('Failed to set up puzzle variable storage.');
     }
 
-    puzvars[key] = value;
-    return saveAllVariables(onError);
-}
+    puzzleVariables.saveAll = function(onError) {
+        if (!onError) onError = logErrorToConsole;
 
-function getVar(key, defaultValue, onError) {
-    if (!storage) {
-        onError(storageError)
-        return false;
+        if (!storage) {
+            onError(storageError);
+            return false;
+        }
+        try {
+            storage.setItem(puzvarKey, JSON.stringify(puzvarCache));
+        } catch (e) {
+            onError(e.message);
+            return false;
+        }
+        return true;
     }
 
-    if (key in puzvars) return puzvars[key];
-    return defaultValue;
-}
+    puzzleVariables.set = function(key, value, onError) {
+        if (!onError) onError = logErrorToConsole;
 
-function unsetVar(key, onError) {
-    if (!storage) {
-        onError(storageError);
-        return false;
+        if (!storage) {
+            onError(storageError);
+            return false;
+        }
+
+        puzvarCache[key] = value;
+        return puzzleVariables.saveAll(onError);
     }
 
-    delete puzvars[key];
-    return saveAllVariables(onError);
-}
+    puzzleVariables.get = function(key, defaultValue, onError) {
+        if (!onError) onError = logErrorToConsole;
 
-function clearAllVariables() {
-    if (!storage) return;
+        if (!storage) {
+            onError(storageError)
+            return false;
+        }
 
-    puzvars = {};
-    storage.remove(puzvarKey);
+        if (key in puzvarCache) return puzvarCache[key];
+        if (defaultValue || typeof(defaultValue) === 'boolean') { 
+            puzvarCache[key] = defaultValue;
+            puzzleVariables.saveAll();
+        }
+        return defaultValue;
+    }
+
+    puzzleVariables.unset = function(key, onError) {
+        if (!onError) onError = logErrorToConsole;
+
+        if (!storage) {
+            onError(storageError);
+            return false;
+        }
+
+        delete puzvarCache[key];
+        return puzzleVariables.saveAll(onError);
+    }
+
+    puzzleVariables.clearAll = function() {
+        if (!storage) return;
+
+        puzvarCache = {};
+        storage.removeItem(puzvarKey);
+        console.log('Cleared all puzzle variables.')
+    }
 }
 //#endregion Variable Storage
 
+//#region Inventory
+const inventory = {};
+let inventoryCache = puzzleVariables.get('inventory', {});
 
-export {stagedReveal, passphraseForms, setVar, getVar, unsetVar, clearAllVariables};
+inventory.hasItem = function(key) {
+    return (key in inventoryCache);
+}
+
+inventory.getItem = function(key) {
+    if (inventory.hasItem(key)) return inventoryCache[key];
+    return false;
+}
+
+inventory.addItem = function(key, data) {
+    if (!data) data = {display: key};    
+    if (!data.count) {data.count = 1};
+
+    const existing = inventory.getItem(key);
+    if (existing) {
+        existing.count += data.count;
+        data = existing;
+    }
+    inventoryCache[key] = data;
+    puzzleVariables.saveAll();
+    inventory.refresh();
+}
+
+inventory.addUnique = function(key, data) {
+    if (!data) data = {display: key};    
+    data.count = 1;
+
+    inventoryCache[key] = data;
+    puzzleVariables.saveAll();
+    inventory.refresh();
+}
+
+inventory.removeItem = function(key, count) {
+    const existing = inventory.getItem(key);   
+    
+    if (existing) {
+        if (count === 0) return existing.count;
+        if (!count) count = 1;
+
+        existing.count = Math.max(0, existing.count - count);
+        if (existing.count === 0)
+            delete inventoryCache[key];
+
+        puzzleVariables.saveAll();
+        inventory.refresh();
+        return existing.count;
+    }
+    return false;
+}
+
+inventory.allItems = function() {
+    return Object.keys(inventoryCache);
+}
+
+inventory.refresh = function() {
+    const displays = document.getElementsByClassName('inventory');
+    for (const display of displays) {
+        const newChildren = [];
+        Object.entries(inventoryCache).forEach(([k,v]) => {
+            const node = document.createElement('li');
+            node.innerText = v?.display ?? k;
+            if (v.tooltip) {
+                node.setAttribute('title', v.tooltip);
+            }
+            newChildren.push(node);
+        });
+        display.replaceChildren(...newChildren);
+        console.log('refreshed inventory');
+    }
+}
+
+inventory.refresh();
+//#endregion Inventory
+
+
+export {stagedReveal, passphraseForms, puzzleVariables, inventory};

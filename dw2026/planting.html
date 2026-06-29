@@ -48,6 +48,12 @@
     </head>
     <body>
       <div class="content">
+
+        <div class="callout">
+          <h4>Inventory</h4>
+          <ul class="inventory"></ul>
+        </div>
+
         <header>
           <h2>Planting</h2>
         </header>
@@ -87,6 +93,10 @@
 
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
+        <div class="callout toast">
+          <p>You got:</p>
+          <p class="primary" title="A garden sprout">&#x1F331;</p>
+        </div>
         <p>One last step before we're done here...</p>
         <p class="primary">Scan the QR code on the <em>back</em> of the sign</p>
       </div>
@@ -125,7 +135,7 @@
 
       <script type="module" defer>
         // Page-specific scripts go here.  
-        import { stagedReveal } from './puzutils.mjs';
+        import { stagedReveal, inventory } from './puzutils.mjs';
 
         const answer = document.getElementById('sorting');
         const correct = document.getElementById('correct');
@@ -175,6 +185,8 @@
             stagedReveal();
             answer.classList.add('solved');
             document.getElementById('hints').classList.add('hidden');
+
+            inventory.addUnique('sprout', {display: '\uD83C\uDF31', tooltip: 'A garden sprout'});
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');

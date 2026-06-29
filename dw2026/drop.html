@@ -17,6 +17,12 @@
     </head>
     <body>
       <div class="content">
+
+        <div class="callout">
+          <h4>Inventory</h4>
+          <ul class="inventory"></ul>
+        </div>
+
         <header>
           <h2>The Drop-Off</h2>
         </header>
@@ -38,6 +44,12 @@
         </form>
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
+
+        <div class="callout toast">
+          <p>You got:</p>
+          <p class="primary" title="A hurriedly-delivered package">&#x1F4E6;</p>
+        </div>
+
         <p class="primary">Return to <strong>S139</strong> to finish kicking off Design Week!</p>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
@@ -72,7 +84,7 @@
 
 
       <script type="module" defer>
-        import { passphraseForms, stagedReveal } from './puzutils.mjs';
+        import { passphraseForms, stagedReveal, inventory } from './puzutils.mjs';
 
         // Page-specific scripts go here.       
         const answer = passphraseForms['answer'];
@@ -87,6 +99,8 @@
             correct.classList.remove('hidden');
             stagedReveal();
             document.getElementById('hints').classList.add('hidden');
+
+            inventory.addUnique('box', {display: '\uD83D\uDCE6', tooltip: 'A hurriedly-delivered package'});
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');

@@ -13,6 +13,7 @@ body {
     
     font-family: "Aktiv Grotesque", "Grotestque", sans-serif;
     text-align: center;
+    background-color: white;
 }
 
 a {
@@ -35,11 +36,11 @@ h4, h5, h6 {
 
 body header {
     margin-bottom: 2rem;
+    margin-top: 1rem;
 }
 
 body header * {
-    margin: 0;
-    
+    margin: 0;    
 }
 
 header p {
@@ -279,4 +280,39 @@ form.solved button::after {
     font-size: 300%;
     color: var(--srhod);
     font-weight: bold;
+}
+
+.callout h4 {
+    margin: -2rem 0 0 0;
+    text-align: left;
+    background-color: white;
+    color: var(--scyan);
+    padding: 0 0.5rem;
+    justify-self: left;
+}
+
+.inventory {
+    margin: 0 auto -0.3rem auto;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
+    padding: 0;
+    font-size: 120%;
+    justify-self: stretch;
+}
+
+.toast {
+    width: 40%;
+    font-size: large;
+    font-weight: bold;
+    color: var(--scyan);
+    margin: 0.2rem auto;
+}
+
+.toast p {
+    margin: 0;
+}
+
+.toast .primary {
+    font-size: 200%;
 }

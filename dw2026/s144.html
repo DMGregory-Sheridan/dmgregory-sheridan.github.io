@@ -17,11 +17,19 @@
     </head>
     <body>
       <div class="content">
+
+        <div class="callout">
+          <h4>Inventory</h4>
+          <ul class="inventory"></ul>
+        </div>
+
         <header>
           <h2>The Mystery of Room S144</h2>
         </header>
         
         <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
+
+
 
         <p class="animated toreveal">Near the lab they call "the wedge", there is a mysterious room...</p>
         <img class="animated toreveal" src="s144door.jpg" alt="The door of S144">
@@ -40,6 +48,12 @@
         </form>
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
+        
+        <div class="callout toast">
+          <p>You got:</p>
+          <p class="primary" title="A mysterious crown">&#x1F451;</p>
+        </div>
+
         <p>What's that doing there?</p>
         <p>Now that we've warmed-up your sleuthing skills, it's time for a land acknowledgement:</p>
         <a class="buttonstyle" href="land.html" title="Proceed to the next stage">Acknowledge</a>
@@ -71,8 +85,8 @@
 
 
       <script type="module" defer>
-        import { passphraseForms, stagedReveal } from './puzutils.mjs';
-        
+        import { passphraseForms, stagedReveal, inventory } from './puzutils.mjs';
+
         // Page-specific scripts go here.       
         const answer = passphraseForms['answer'];
         const correct = document.getElementById('correct');
@@ -86,6 +100,8 @@
             correct.classList.remove('hidden');
             stagedReveal();
             document.getElementById('hints').classList.add('hidden');
+
+            inventory.addUnique('crown', {display: '\uD83D\uDC51', tooltip: 'A mysterious crown'});
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');
