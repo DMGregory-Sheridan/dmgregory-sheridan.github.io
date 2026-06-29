@@ -23,22 +23,22 @@
         
         <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
 
-        <p class="animated toreveal">Return to the SCAET main entrance from Ceremonial Road.</p>
-        <p class="animated toreveal">Seek the place where the world's largest river drops off.</p>
+        <p class="animated toreveal">Return to the main entrance to SCAET from the roundabout.</p>
+        <p class="animated toreveal">Seek the place where <em>the world's largest river</em> drops off.</p>
         <p class="animated toreveal primary">What is its name?</p>
         <form class="animated toreveal" autocomplete="off" action="" id="answer">
           <div class="charbychar">
-            <input type="text" name="char1" maxlength="1" title="First letter"/>
-            <input type="text" name="char2" maxlength="1" title="Second letter"/>
-            <input type="text" name="char3" maxlength="1" title="Third letter"/>
-            <input type="text" name="char4" maxlength="1" title="Fourth letter"/>
-            <input type="text" name="char5" maxlength="1" title="Fifth letter"/>
+            <input type="text" name="char1" title="First letter"/>
+            <input type="text" name="char2" title="Second letter"/>
+            <input type="text" name="char3" title="Third letter"/>
+            <input type="text" name="char4" title="Fourth letter"/>
+            <input type="text" name="char5" title="Fifth letter"/>
           </div>
           <button class="fullwidth" type="submit">Answer</button>
         </form>
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
-        <p class="primary">Return to S139 to begin your Design Week</p>
+        <p class="primary">Return to <strong>S139</strong> to finish kicking off Design Week!</p>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
         <h3>Try Again!</h3>
@@ -58,6 +58,13 @@
             <p>"Drops off" = "delivers".</p>
           </div>
         </article>
+                <article class="fold-out animated toreveal collapsed">
+          <header>One more hint, please!</header>
+          <div>
+            <p>There is a locker near the SCAET entrance on the second floor where Amazon deliveries are stashed for their recipients to collect them.</p>
+            <p>In the top-right corner of the locker structure, you'll see it's labelled with a name.</p>
+          </div>
+        </article>
       </section>
     </div>
       
@@ -66,7 +73,7 @@
 
       <script type="module" defer>
         import { passphraseForms, stagedReveal } from './puzutils.mjs';
-        
+
         // Page-specific scripts go here.       
         const answer = passphraseForms['answer'];
         const correct = document.getElementById('correct');

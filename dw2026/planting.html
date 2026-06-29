@@ -87,7 +87,7 @@
 
       <div class="animated toreveal hidden" id="correct">
         <h3>Correct!</h2>
-        <p>One last stop before we're done...</p>
+        <p>One last step before we're done here...</p>
         <p class="primary">Scan the QR code on the <em>back</em> of the sign</p>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
@@ -173,6 +173,7 @@
             incorrect.classList.add('hidden');
             correct.classList.remove('hidden');
             stagedReveal();
+            answer.classList.add('solved');
             document.getElementById('hints').classList.add('hidden');
           } else {
             incorrect.classList.remove('hidden');
