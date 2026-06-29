@@ -2,7 +2,7 @@
 <html lang="en-CA">
     <head>
         <meta charset="utf-8" />
-        <title>Land Acknowledgement</title>
+        <title>The Garden Path</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />    
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,8 +10,8 @@
         <link href="puzstyles.css" rel="stylesheet">
         <meta name="description" content="Part of a warm-up activity to kick off Design Week 2026." />
         <meta property="og:description" content="Part of a warm-up activity to kick off Design Week 2026." />
-        <meta property="og:title" content="Land Acknowledgement" />
-        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/land.html" />
+        <meta property="og:title" content="The Garden Path" />
+        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/garden.html" />
         <meta property="og:type" content="website" />
         <script type="module" src="puzutils.mjs"></script>
         <script type="module" src="geopuzzle.mjs"></script>
@@ -19,13 +19,14 @@
     <body>
       <div class="content">
         <header>
-          <h2>Land Acknowledgement</h2>
+          <h2>The Garden Path</h2>
         </header>
         
         <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
 
-        <p class="animated toreveal">Leave the SCAET building through the door by the elevator on the first floor.</p>        
-        <p class="animated toreveal">Head toward the grey (formerly rainbow) bridge on the way to the SSU.</p>
+        <p class="animated toreveal">Head north-east toward the roundabout.</p>
+        <p class="animated toreveal">Stay on the left side, and you should reach:</p>       
+        <p class="animated toreveal primary">The Medicine Garden</p>
         <div class="callout widget animated toreveal" id="gpsWidget">
           <button id="enableGPS" class="gps fullwidth">Enable GPS</button>
           <div id="havePermission" class="rowlockup hidden">
@@ -34,40 +35,17 @@
           </div>
           <button id="skipGPS" class="skip fullwidth">Skip</button>
         </div>
-        <p class="animated toreveal hidden postGPS">Seek wisdom from an eagle about the treaty that governs how we share this land.</p>
-        <p class="animated toreveal primary hidden postGPS">In what year was the treaty signed?</p>
-        <form class="animated toreveal hidden postGPS" autocomplete="off" action="" id="answer">
-          <div class="charbychar">
-            <input type="text" name="char1" maxlength="1" inputmode="numeric" title="First digit"/>
-            <input type="text" name="char2" maxlength="1" inputmode="numeric" title="Second digit"/>
-            <input type="text" name="char3" maxlength="1" inputmode="numeric" title="Third digit"/>
-            <input type="text" name="char4" maxlength="1" inputmode="numeric" title="Fourth digit"/>
-          </div>
-          <button class="buttonstyle" type="submit">Answer</button>
-        </form>
-      <div class="animated toreveal hidden" id="correct">
-        <h3>Correct!</h2>
-        <p class="primary">We are all treaty people.</p>
-
-        <p>You can return here any time and scan the QR code to learn more.</p>
-
-        <a class="buttonstyle" href="garden.html" title="Proceed to the next stage">Acknowledged</a>
-        
-        <!--<p>Scan the QR code on the <strong>back</strong> of the sign to proceed...</p>-->
-      </div>
-      <div class="animated toreveal hidden" id="incorrect">
-        <h3>Try Again!</h3>
-        <p>'<span id="attempt"></span>' is not the correct answer.</p>
-      </div>
+        <p class="animated toreveal hidden postGPS">Look for a sign that shows what is planted.</p>
+        <a class="buttonstyle animated toreveal hidden postGPS" href="planting.html" title="Proceed to the next stage">Plant Your Garden</a>
       
       <section id="hints">
-        <article class="fold-out animated toreveal collapsed hidden postGPS">
+        <article class="fold-out animated toreveal collapsed">
           <header>I need a hint</header>
           <div>
-            <p>Look for this sign:</p>
-            <img src="landsign.jpg" alt="You are on Treaty Lands of the Mississaugas of the Credit River (eagle insignia) 'As long as the grass grows, sun shines, and rivers flow' We Are All Treaty People">
-            <p>Read the info below about Treaty 14.</p>
+            <p>Look for the "Unlock Learning" banner: the Medicine Garden is just past it.</p>
+            <img src="togarden.jpg" alt="A photo of the Ceremonial Road roundabout, with the Sheridan S sculpture in the foreground, and a red arrow pointing to the Medicine Garden.">
           </div>
+          
         </article>
       </section>
 
@@ -79,9 +57,9 @@
     
 
 
-      <script type="module" defer>        
-        import { passphraseForms, stagedReveal } from './puzutils.mjs';
-        import { gpsRanger } from './geopuzzle.mjs';
+      <script type="module" defer>
+        import { stagedReveal } from './puzutils.mjs'
+        import { gpsRanger } from './geopuzzle.mjs'
 
         // Page-specific scripts go here.  
         const readout = document.getElementById('readout');
@@ -124,28 +102,7 @@
           onArrive
         );
 
-        ranger.setDestination({latitude: 43.469086908453306, longitude: -79.69921232050761});
-             
-        const answer = passphraseForms['answer'];
-        const correct = document.getElementById('correct');
-        const incorrect = document.getElementById('incorrect');
-
-        answer.addEventListener('submit', (e) => {
-          e.preventDefault();
-          if (answer.checkAnswer('1806')) {
-            // Correct answer!
-            incorrect.classList.add('hidden');
-            correct.classList.remove('hidden');
-            stagedReveal();
-            document.getElementById('hints').classList.add('hidden');
-          } else {
-            incorrect.classList.remove('hidden');
-            correct.classList.add('hidden');
-            
-            document.getElementById('attempt').innerText = answer.getValue();
-            stagedReveal();
-          }
-        });
+        ranger.setDestination({latitude: 43.46965728573766, longitude: -79.69815718148473});
       </script>  
     </body>
 </html>

@@ -42,7 +42,7 @@
         <h3>Correct!</h2>
         <p>What's that doing there?</p>
         <p>Now that we've warmed-up your sleuthing skills, it's time for a land acknowledgement:</p>
-        <a class="buttonstyle" href="land.html">Acknowledge</a>
+        <a class="buttonstyle" href="land.html" title="Proceed to the next stage">Acknowledge</a>
       </div>
       <div class="animated toreveal hidden" id="incorrect">
         <h3>Try Again!</h3>
@@ -71,7 +71,8 @@
 
 
       <script type="module" defer>
-        import { passphraseForms, stagedReveal } from './puzutils.mjs'
+        import { passphraseForms, stagedReveal } from './puzutils.mjs';
+        
         // Page-specific scripts go here.       
         const answer = passphraseForms['answer'];
         const correct = document.getElementById('correct');

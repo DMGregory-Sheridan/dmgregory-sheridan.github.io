@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+    <head>
+        <meta charset="utf-8" />
+        <title>Planting</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />    
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap" rel="stylesheet">    
+        <link href="puzstyles.css" rel="stylesheet">
+        <meta name="description" content="Part of a warm-up activity to kick off Design Week 2026." />
+        <meta property="og:description" content="Part of a warm-up activity to kick off Design Week 2026." />
+        <meta property="og:title" content="The Garden Path" />
+        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/garden.html" />
+        <meta property="og:type" content="website" />
+        <script type="module" src="puzutils.mjs"></script>
+        <script type="module" src="geopuzzle.mjs"></script>
+        <style>
+          .quadrants {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            justify-items: center;
+            aspect-ratio: 1;
+            background-image: url("medicinewheel.png");
+            background-size: cover;
+          }
+          .quadrants li {
+            display: flex;
+            flex-direction: column;
+          }
+          .quadrants label {
+            font-weight: bold;
+          }
+          .quadrants input {
+            margin: 0;
+            width: 6rem;
+            height: 4rem;
+            text-align: center;
+            font-size: 150%;
+          }
+          article li {
+            text-align: left;
+          }
+        </style>
+    </head>
+    <body>
+      <div class="content">
+        <header>
+          <h2>Planting</h2>
+        </header>
+        
+        <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
+
+        <p class="animated toreveal">Check out the sign to learn about the Sheridan Medicine Wheel Garden.</p>  
+        <p class="animated toreveal primary">Sort each creature into its home</p>
+        <form class="callout widget animated toreveal" id="sorting">
+          <ul class="quadrants">
+            <li>              
+              <input list="animals" id="red" name="west" title="Red / West"/>
+              <label for="red">Red / West</label>
+            </li>
+            <li>
+              
+              <input list="animals" id="white" name="north" title="White / North"/>
+              <label for="red">White / North</label>
+            </li>
+            <li>
+              <label for="red">Blue / South</label>
+              <input list="animals" id="blue" name="south" title="Blue / South"/>
+            </li>
+            <li>
+              <label for="red">Yellow / East</label>
+              <input list="animals" id="yellow" name="east" title="Yellow / East"/>
+            </li>
+          </ul>
+          <datalist id="animals">
+            <option value="&#128029;">Bee</option>
+            <option value="&#129419;">Butterfly</option>  
+            <option value="&#128008;">Cat</option>
+            <option value="&#128007;">Hare</option>                      
+          </datalist>
+          <button class="buttonstyle" type="submit">Answer</button>
+        </form>
+
+      <div class="animated toreveal hidden" id="correct">
+        <h3>Correct!</h2>
+        <p>One last stop before we're done...</p>
+        <p class="primary">Scan the QR code on the <em>back</em> of the sign</p>
+      </div>
+      <div class="animated toreveal hidden" id="incorrect">
+        <h3>Try Again!</h3>
+        <p>'<span id="attempt"></span>' is not the correct answer.</p>
+      </div>
+      
+      <section id="hints">
+        <article class="fold-out animated toreveal collapsed">
+          <header>I need a hint</header>
+          <div>
+            <p>Check out the planting diagram on this sign:</p>
+            <img src="medicine.jpg" alt="A sign explaining the Sheridan Medicine Garden, listing what plants are found in each quadrant.">
+          </div>
+        </article>
+        <article class="fold-out animated toreveal collapsed">
+          <header>I need another hint</header>
+          <div>
+            <p>There's a plant in each quadrant whose name includes the name (or nickname) of an animal.</p>
+          </div>
+        </article>
+                <article class="fold-out animated toreveal collapsed">
+          <header>One more hint, please!</header>
+          <div>
+            <ul>
+              <li>&#128029; = <strong>Bee-Balm</strong></li>
+              <li>&#128008; = <strong>Pussytoes</strong> ("Pussycat")</li>
+              <li>&#128007; = <strong>Harebell</strong> ("Hares" are similar to rabbits)</li>
+              <li>&#129419; =<strong>Butterfly Milkweed</strong></li>
+            </ul>
+          </div>
+        </article>
+      </section>    
+
+
+      <script type="module" defer>
+        // Page-specific scripts go here.  
+        import { stagedReveal } from './puzutils.mjs';
+
+        const answer = document.getElementById('sorting');
+        const correct = document.getElementById('correct');
+        const incorrect = document.getElementById('incorrect');
+
+        const quads = [
+          document.getElementById('red'),
+          document.getElementById('white'),
+          document.getElementById('blue'),
+          document.getElementById('yellow')
+        ];
+
+        const solution = [
+          '\uD83D\uDC1D', // Bee
+          '\uD83D\uDC08', // Cat
+          '\uD83D\uDC07', // Rabbit / Hare
+          '\uD83E\uDD8B' // Butterfly
+        ];
+
+        function eraseOnClick(e) {
+          if (e.currentTarget.value) {
+            e.currentTarget.value = '';
+          }
+          return false;
+        }
+
+
+        for (const el of quads) {
+         // el.addEventListener('click', eraseOnClick);
+        }
+
+        answer.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          let solved = true;
+          let attempt = '';
+          for (let i = 0; i < 4; i++) {            
+            attempt += quads[i].value;
+            if (i < 3) attempt += "', '";
+            solved &= (quads[i].value === solution[i]);
+          }
+
+          if (solved) {
+            // Correct answer!
+            incorrect.classList.add('hidden');
+            correct.classList.remove('hidden');
+            stagedReveal();
+            document.getElementById('hints').classList.add('hidden');
+          } else {
+            incorrect.classList.remove('hidden');
+            correct.classList.add('hidden');
+            
+            document.getElementById('attempt').innerText = attempt;
+            stagedReveal();
+          }
+        });
+
+      </script>  
+    </body>
+</html>
