@@ -61,7 +61,7 @@
         <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
 
         <p class="animated toreveal">Check out the sign to learn about the Sheridan Medicine Wheel Garden.</p>  
-        <p class="animated toreveal primary">Sort each creature into its home</p>
+        <p class="animated toreveal primary">Sort each creature into its flower bed</p>
         <form class="callout widget animated toreveal" id="sorting">
           <ul class="quadrants">
             <li>              
@@ -162,9 +162,14 @@
           return false;
         }
 
+        function defocusOnSelect(e) {
+          e.currentTarget.blur();
+        }
+
 
         for (const el of quads) {
-         // el.addEventListener('click', eraseOnClick);
+          el.addEventListener('focus', eraseOnClick);
+          el.addEventListener('change', defocusOnSelect);
         }
 
         answer.addEventListener('submit', (e) => {

@@ -16,6 +16,7 @@ class gpsRanger {
     onArrive;
     #arrivedAt;
     #watchID = -1;
+    skipButton;
 
     // TODO: add success handler (switch permissions to content, begin querying updates).
     // TODO: add distance update handler.
@@ -23,13 +24,14 @@ class gpsRanger {
     constructor(enableButton, skipButton, onEnable, onError, onRangeUpdate, onArrive) {
         this.onRangeUpdate = onRangeUpdate;
         this.onArrive = onArrive;
+        this.skipButton = skipButton;
 
         skipButton.addEventListener('click', () => {
             if (this.#watchID === -1) {
                 enableButton.classList.add('hidden');
                 onEnable();
             }
-            onArrive()
+            this.arrive(undefined);
         });
 
         const startGPS = () => {
@@ -56,6 +58,16 @@ class gpsRanger {
         }
     }
 
+    arrive(destination) {
+        this.#arrivedAt = destination;
+        if (!this.onArrive || this.onArrive(destination)) {
+            this.skipButton.classList.add('hidden');
+            
+            if (this.#watchID != -1)
+                navigator.geolocation.clearWatch(this.#watchID);
+        }
+    }
+
     onGeoUpdate(geodata) {
         if (!this.#destinations) return;
 
@@ -72,10 +84,7 @@ class gpsRanger {
         this.onRangeUpdate(minDistance, closest);
 
         if (closest && minDistance <= closest.tolerance && this.#arrivedAt !== closest) {
-            this.#arrivedAt = closest;
-            if (this.onArrive(closest)) {
-                navigator.geolocation.clearWatch(this.#watchID);
-            }
+            this.arrive(closest);
         }
     }
 

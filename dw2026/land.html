@@ -55,12 +55,12 @@
         <h3>Correct!</h2>
         <p class="primary">We are all treaty people.</p>
 
+        <p>You can return here any time and scan the QR code to learn more.</p>
+
         <div class="callout toast">
           <p>You got:</p>
           <p class="primary" title="A guardian eagle">&#x1F985;</p>
         </div>
-
-        <p>You can return here any time and scan the QR code to learn more.</p>
 
         <a class="buttonstyle" href="garden.html" title="Proceed to the next stage">Acknowledged</a>
         
@@ -150,7 +150,7 @@
             stagedReveal();
             document.getElementById('hints').classList.add('hidden');
 
-            inventory.addUnique('eagle', {display: '\uD83E\uDD85', tooltip: 'A guardian eagle.'});
+            inventory.addUnique('eagle', {display: '\uD83E\uDD85', tooltip: 'A guardian eagle'});
           } else {
             incorrect.classList.remove('hidden');
             correct.classList.add('hidden');

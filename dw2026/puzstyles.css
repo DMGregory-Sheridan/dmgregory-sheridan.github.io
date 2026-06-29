@@ -34,7 +34,7 @@ h4, h5, h6 {
     color: var(--sblue);
 }
 
-body header {
+body > div > header {
     margin-bottom: 2rem;
     margin-top: 1rem;
 }
