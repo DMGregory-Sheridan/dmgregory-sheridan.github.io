@@ -80,9 +80,9 @@
               let data = 'NDEFMessage read successfully:';
               for (const rec of message.records) {
                 data += `<br/> [${rec.recordType}] (${rec.mediaType}) ${rec.id}`;
-                const textDecoder = new TextDecoder('utf-8'); 
-                const decodedString = textDecoder.decode(rec.data);
-                data += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${decodedString}`;
+                //const textDecoder = new TextDecoder('utf-8'); 
+                //const decodedString = textDecoder.decode(rec.data);
+                //data += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${decodedString}`;
               }
               textOut.innerHTML = data;
               readInProgress = false;
