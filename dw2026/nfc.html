@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+    <head>
+        <meta charset="utf-8" />
+        <title>NFC Test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />  
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap" rel="stylesheet">      
+        <link href="puzstyles.css" rel="stylesheet">
+        <meta name="description" content="Experimental part of a warm-up activity to kick off Design Week 2026." />
+        <meta property="og:description" content="Experimental part of a warm-up activity to kick off Design Week 2026." />
+        <meta property="og:title" content="NFC Test" />
+        <meta property="og:url" content="https://dmgregory-sheridan.github.io/dw2026/drop.html" />
+        <meta property="og:type" content="website" />
+    </head>
+    <body>
+      <div class="content">
+        <header>
+          <h2>NFC Test</h2>
+        </header>
+        
+        <noscript><div class="callout warning"><p>Please <a href="https://www.wikihow.com/Enable-JavaScript" title="How to enable JavaScript">enable JavaScript</a> to use this page.</p></div></noscript>
+
+        <button id="enable">Enable NFC</button>
+        <p id="textOut">Nothing to see here.</p>
+    </div>
+      
+
+
+
+      <script type="module" defer>
+        const textOut = document.getElementById('textOut');
+        const enableButton = document.getElementById('enable');
+        
+
+
+        let reader;
+        let readInProgress = false;
+        let writeInProgress = false;
+        let abortContol;
+
+        async function scanButton(e) {
+          if (readInProgress) {
+            abortContol.abort();
+            console.log('Aborted a scan in progress.');
+            enableButton.innerText = 'Scan';
+            readInProgress = false;
+          } else {
+            readInProgress = true;
+            enableButton.innerText = 'Scanning...';
+            abortContol = new AbortController();
+            ndef.scan({signal: abortContol.signal}).then(
+              // Fulfilled
+              () => {
+                enableButton.innerText = 'Stop Scanning';
+              }, 
+              
+              // Failed
+              (err) =>{
+                enableButton.innerText = 'Try Again?';
+                if (!(err instanceof Error)) err = new Error(err);
+                textOut.innerText = `Error scheduling scan: '${err.message}'`;
+                readInProgress = false;
+              }
+            );            
+          }
+        }
+
+
+        if (typeof NDEFReader !== 'undefined') {
+          try {
+            reader = new NDEFReader();
+
+            reader.onreading = (message) => {
+              readInProgress = false;
+              enableButton.innerText = 'Scan Again';
+
+              let data = 'NDEFMessage read successfully:';
+              for (const rec of message.records) {
+                data += `<br/> [${rec.recordType}] (${rec.mediaType}) ${rec.id}`;
+                const textDecoder = new TextDecoder('utf-8'); 
+                const decodedString = textDecoder.decode(rec.data);
+                data += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${decodedString}`;
+              }
+              textOut.innerHTML = data;
+            }
+
+            reader.onreadingerror = (err) => {
+                enableButton.innerText = 'Try Again?';
+                if (!(err instanceof Error)) err = new Error(err);
+                textOut.innerText = `Error during reading: '${err.message}'`;
+                readInProgress = false;
+            }
+
+            enableButton.addEventListener('click', scanButton);
+          } catch (err) {
+            enableButton.classList.add('hidden');
+            if (!(err instanceof Error)) err = new Error(err);
+            textOut.innerText = `Exception setting up NFCReader: '${err.message}'`;
+          }
+          
+        } else {
+          enableButton.classList.add('hidden');
+          textOut.innerText = `NDEFReader is 'undefined'`;
+        }
+
+
+
+        // Page-specific scripts go here.  
+      </script>  
+    </body>
+</html>
