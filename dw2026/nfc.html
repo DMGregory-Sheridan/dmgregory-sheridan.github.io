@@ -50,10 +50,11 @@
             readInProgress = true;
             enableButton.innerText = 'Scanning...';
             abortContol = new AbortController();
-            ndef.scan({signal: abortContol.signal}).then(
+            reader.scan({signal: abortContol.signal}).then(
               // Fulfilled
               () => {
                 enableButton.innerText = 'Stop Scanning';
+                textOut.innerHTML = 'scanning...';
               }, 
               
               // Failed
@@ -84,16 +85,19 @@
                 data += `<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${decodedString}`;
               }
               textOut.innerHTML = data;
-            }
+              readInProgress = false;
+            };
 
             reader.onreadingerror = (err) => {
                 enableButton.innerText = 'Try Again?';
                 if (!(err instanceof Error)) err = new Error(err);
                 textOut.innerText = `Error during reading: '${err.message}'`;
                 readInProgress = false;
-            }
+            };
 
             enableButton.addEventListener('click', scanButton);
+
+            textOut.innerText = 'Ready to scan.';
           } catch (err) {
             enableButton.classList.add('hidden');
             if (!(err instanceof Error)) err = new Error(err);
